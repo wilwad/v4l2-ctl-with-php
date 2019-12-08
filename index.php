@@ -96,47 +96,48 @@
 			    $options .= "<option value='$device' $selected>$device -- $dev</option>";
 			}
 		}
+?>
+		<h1>v4l2-ctl with PHP <small>by William Sengdara</small></h1>
+		<h5 class='warn'>Note: Tested with devices with a single interface only.</h5>
+		<h5>Inspired by this article: <a href='https://www.kurokesu.com/main/2016/01/16/manual-usb-camera-settings-in-linux/' 
+							target='_blank'>Manual USB camera settings in Linux</a></h5>
+		<HR>
+		<form method='POST'>
+		<input type='hidden' name='update' value='1'>
 
-		echo "<h1>v4l2-ctl with PHP <small>by William Sengdara</small></h1>
-				<h5 class='warn'>Note: Tested with devices with a single interface only.</h5>
-				<h5>Inspired by this article: <a href='https://www.kurokesu.com/main/2016/01/16/manual-usb-camera-settings-in-linux/' 
-									target='_blank'>Manual USB camera settings in Linux</a></h5>
-				<HR>
-				<form method='POST'>
-				<input type='hidden' name='update' value='1'>
+		<select name='device' style='width:100%' onchange='document.forms[0].submit()'>
+		 <?php echo $options; ?>
+		</select>	
+		<HR>
+		 <?php echo $controls; ?>
+		<BR>
+		<input type='submit' <?php echo @ $_POST['device']=='' ? 'disabled' : '' ?> value='Update Device'>
+		<BR>
+	  </form>
+	  <script>
+		window.addEventListener('load', ()=>{
 
-				<select name='device' style='width:100%' onchange='document.forms[0].submit()'>
-				 $options
-				</select>	
-				<HR>
-				$controls
-				<BR>
-				<input type='submit' value='Update Device'>
-				<BR>
-			  </form>
-			  <script>
-				window.addEventListener('load', ()=>{
-					var ctls = document.querySelectorAll(\"input[type='range']\")
-					for(let idx=0; idx < ctls.length; idx++){
-						let ctl = ctls[idx];
-						ctl.addEventListener('mousedown',()=>{
-							ctl.mousedown = true;
-						});
-						ctl.addEventListener('mouseup',()=>{
-							ctl.mousedown = false;
-						});
-						ctl.addEventListener('change',()=>{
-							if (!ctl.mousedown) return;
-							//console.log(ctl.name, ctl.value);
-							ctl.title = ctl.value;
-						});
-					}
-				}, false);
-			  </script>";
+			var ctls = document.querySelectorAll("input[type='range']");
+			for(let idx=0; idx < ctls.length; idx++){
+				let ctl = ctls[idx];
+				ctl.addEventListener('mousedown',()=>{
+					ctl.mousedown = true;
+				});
+				ctl.addEventListener('mouseup',()=>{
+					ctl.mousedown = false;
+				});
+				ctl.addEventListener('change',()=>{
+					if (!ctl.mousedown) return;
+					//console.log(ctl.name, ctl.value);
+					ctl.title = ctl.value;
+				});
+			}
+		}, false);
+	  </script>
 
-
+   <?php
 		if (@ $_POST['update'] == 1){
-				$date = date('Y-m-d H:i:s');
+			$date = date('Y-m-d H:i:s');
 			echo "<h6>Device was updated at $date</h6>";
 		}
    ?>
