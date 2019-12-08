@@ -7,11 +7,13 @@ I decided to create a PHP interface for controlling UVC-compatible devices using
 Requirements
 
 Must have v4l2-ctl installed already by 
-
+```
 sudo apt update
 sudo apt-get install v4l-utils
-
+```
 Usage
-
+```
 Start PHP test server
 php -S localhost:8080
+```
+![Interface](https://github.com/wilwad/v4l2-ctl-with-php/blob/master/image.png)
