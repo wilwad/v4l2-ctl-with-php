@@ -23,7 +23,8 @@
  <body>
   <?php
 		// did we do an update?
-		if (@ $_POST['update'] == 1){
+		if (@ $_POST['update'] == 1 && 
+            @ $_POST['device'] !== ''){
 			$device = $_POST['device'];
 
 			foreach ($_POST as $name=>$value){
@@ -34,6 +35,7 @@
 						break;
 
 					default:
+						echo "$name to $value, ";
 						$command = "v4l2-ctl -d $device --set-ctrl=$name=$value";
 						$x = shell_exec( $command );
 				}
@@ -105,7 +107,7 @@
 		<form method='POST'>
 		<input type='hidden' name='update' value='1'>
 
-		<select name='device' style='width:100%' onchange='document.forms[0].submit()'>
+		<select name='device' style='width:100%' onchange='submit_form()'>
 		 <?php echo $options; ?>
 		</select>	
 		<HR>
@@ -115,8 +117,15 @@
 		<BR>
 	  </form>
 	  <script>
-		window.addEventListener('load', ()=>{
+		var form = null;
 
+		var submit_form = ()=>{
+			// changing current device should not update device
+			form.querySelector('input[name="update"]').remove(); 
+			form.submit();
+		}
+		window.addEventListener('load', ()=>{
+			form = document.forms[0];
 			var ctls = document.querySelectorAll("input[type='range']");
 			for(let idx=0; idx < ctls.length; idx++){
 				let ctl = ctls[idx];
